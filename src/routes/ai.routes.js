@@ -5,7 +5,7 @@ const { enhanceProfessionalSummaryController, enhanceJobDescriptionController, u
 const router = express.Router();
 
 
-router.post("/enhanced-pro-sum", authMiddleware,enhanceProfessionalSummaryController);
+router.post("/enhance-pro-sum", authMiddleware,enhanceProfessionalSummaryController);
 router.post("/enhanced-job-desc", authMiddleware,enhanceJobDescriptionController);
 router.post("/upload-resume",authMiddleware,uploadResumeController );
 

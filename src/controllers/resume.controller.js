@@ -158,7 +158,13 @@ const updateResumeController = async (req, res) => {
     const userId = user._id
     const { resumeId, resumeData, removeBackground } = req.body
 
-    let resumeDataCopy = JSON.parse(JSON.stringify(resumeData))
+    let resumeDataCopy ;
+    if (typeof resumeData === 'string') {
+      resumeDataCopy=  JSON.parse(resumeData)
+    }else{
+      resumeDataCopy=  structuredClone(resumeData)
+
+    }
 
     // ✅ IF IMAGE IS SENT
     if (req.file) {
