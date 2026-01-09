@@ -256,8 +256,49 @@ const uploadResumeController = async (req, res) => {
   }
 }
 
+const enhanceFeedbackMessageController = async (req, res) => {
+  try {
+    const { userContent } = req.body
+
+    if (!userContent) {
+      return res.status(400).json({
+        message: "Missing content!",
+      })
+    }
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Improve the given feedback message by rewriting it into one clear, professional sentence that reflects the user’s experience and rating tone, and highlights key benefits. Return only the improved text.",
+        },
+        {
+          role: "user",
+          content: userContent,
+        },
+      ],
+    })
+
+    const enhancedContent = response.choices[0].message.content
+
+    return res.status(200).json({
+      message: "Feedback enhanced successfully",
+      enhancedContent,
+    })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      message: "Internal server error",
+    })
+  }
+}
+
+
 module.exports = {
   enhanceProfessionalSummaryController,
   enhanceJobDescriptionController,
   uploadResumeController,
+  enhanceFeedbackMessageController,
 }
