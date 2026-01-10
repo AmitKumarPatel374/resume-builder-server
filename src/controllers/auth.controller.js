@@ -25,7 +25,7 @@ const registerController = async (req, res) => {
       password,
     })
 
-     const token = newUser.generateToken()
+    const token = newUser.generateToken()
     // ✅ SET COOKIE
     res.cookie("token", token, {
       httpOnly: true, // cannot access via JS (security)
@@ -36,7 +36,7 @@ const registerController = async (req, res) => {
 
     return res.status(201).json({
       message: "user registered",
-      token:token,
+      token: token,
       user: newUser,
     })
   } catch (error) {
@@ -113,17 +113,16 @@ const loginController = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.user
 
     return res.status(200).json({
       message: "user fetched successfully!",
-      user
-    });
+      user,
+    })
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" })
   }
-};
-
+}
 
 const logoutController = async (req, res) => {
   try {
@@ -151,9 +150,26 @@ const logoutController = async (req, res) => {
   }
 }
 
+const countUserController = async (req, res) => {
+  try {
+    const userCount = await UserModel.countDocuments()
+
+    return res.status(200).json({
+      userCount,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      message: "Internal server error ",
+      error: error,
+    })
+  }
+}
+
 module.exports = {
   registerController,
   loginController,
   getUserById,
-  logoutController
+  logoutController,
+  countUserController
 }
