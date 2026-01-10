@@ -3,13 +3,6 @@ const express =require("express");
 const cookiesParser =require("cookie-parser");
 const cors =require("cors");
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    process.env.CLIENT_ORIGIN
-  ],
-  credentials: true,
-}));
 
 const connectDB = require("./src/config/database/db");
 const cacheInstance = require('./src/services/cache.service');
@@ -22,6 +15,13 @@ const emailRoutes = require("./src/routes/email.routes");
 
 const app = express();
 connectDB();
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    process.env.CLIENT_ORIGIN
+  ],
+  credentials: true,
+}));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
