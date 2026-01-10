@@ -29,8 +29,8 @@ const registerController = async (req, res) => {
     // ✅ SET COOKIE
     res.cookie("token", token, {
       httpOnly: true, // cannot access via JS (security)
-      secure: false, // true in production (HTTPS)
-      sameSite: "lax",
+      secure: true, // true in production (HTTPS)
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 hour
     })
 
@@ -77,8 +77,8 @@ const loginController = async (req, res) => {
     // ✅ SET COOKIE
     res.cookie("token", token, {
       httpOnly: true, // cannot access via JS (security)
-      secure: false, // true in production (HTTPS)
-      sameSite: "lax",
+      secure: true, // true in production (HTTPS)
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 hour
     })
     // // Generate 6-digit OTP
