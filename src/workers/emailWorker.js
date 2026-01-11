@@ -8,6 +8,7 @@ import { sendContactAdminEmail } from "../services/sendmail/sendContactAdminEmai
 import { sendContactUserEmail } from "../services/sendmail/sendContactUserEmail.js"
 import { sendThanksFeedbackEmail } from "../services/sendmail/sendThanksFeedbackEmail.js"
 import { sendVerifyEmailOtp } from "../services/sendmail/sendVerifyEmailOtp.js"
+import { sendWelcomeEmail } from "../services/sendmail/sendWelcomeEmail.js"
 
 new Worker(
   "email-queue",
@@ -18,7 +19,9 @@ new Worker(
     } else if (job.name === "thanks-feedback") {
       await sendThanksFeedbackEmail(job.data)
     } else if (job.name === "verify-email") {
-      sendVerifyEmailOtp(job.data)
+      await sendVerifyEmailOtp(job.data)
+    } else if (job.name === "welcome-email") {
+      await sendWelcomeEmail(job.data)
     } else {
       console.warn("⚠️ Unknown job type:", job.name)
     }

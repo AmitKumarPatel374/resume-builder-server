@@ -25,7 +25,7 @@ export const registerController = async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const otpExpiry = new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     //ye resend email ke liye bhi use hoga if email new then it will create new
     await TempUser.findOneAndUpdate(
@@ -45,7 +45,6 @@ export const registerController = async (req, res) => {
       otp,
       otpExpiry,
     })
-
 
     return res.status(200).json({
       message: "OTP sent to your email. please verify!",
@@ -95,10 +94,16 @@ export const verifyEmailController = async (req, res) => {
 
     await TempUser.deleteOne({ email })
 
+    // ✅ SEND WELCOME EMAIL (IMPORTANT)
+    await emailQueue.add("welcome-email", {
+      name: newUser.name,
+      email: newUser.email,
+    })
+
     return res.status(201).json({
       message: "user registered successfully!",
       token: token,
-      newUser,
+      user:newUser,
     })
   } catch (error) {
     console.log(error)
@@ -111,47 +116,45 @@ export const verifyEmailController = async (req, res) => {
 
 export const resendOTPController = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email } = req.body
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return res.status(400).json({ message: "Email is required" })
     }
 
     // check temp user exists
-    const tempUser = await TempUser.findOne({ email });
+    const tempUser = await TempUser.findOne({ email })
 
     if (!tempUser) {
-      return res
-        .status(404)
-        .json({ message: "No pending verification for this email" });
+      return res.status(404).json({ message: "No pending verification for this email" })
     }
 
     // generate new OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
+    const otp = Math.floor(100000 + Math.random() * 900000).toString()
+    const otpExpiry = Date.now() + 5 * 60 * 1000 // 5 minutes
 
     // update OTP & expiry
-    tempUser.otp = otp;
-    tempUser.otpExpiry = otpExpiry;
-    await tempUser.save();
+    tempUser.otp = otp
+    tempUser.otpExpiry = otpExpiry
+    await tempUser.save()
 
     // send OTP email
     await emailQueue.add("verify-email", {
       email,
       otp,
       otpExpiry,
-    });
+    })
 
     return res.status(200).json({
       message: "OTP resent successfully",
-    });
+    })
   } catch (error) {
-    console.error("Resend OTP error:", error);
+    console.error("Resend OTP error:", error)
     return res.status(500).json({
       message: "Failed to resend OTP",
-    });
+    })
   }
-};
+}
 
 export const loginController = async (req, res) => {
   try {
