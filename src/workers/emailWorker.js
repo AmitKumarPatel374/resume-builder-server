@@ -1,7 +1,4 @@
 import "dotenv/config"
-console.log("REDIS HOST:", process.env.REDIS_HOST)
-console.log("REDIS PORT:", process.env.REDIS_PORT)
-console.log("REDIS PASSWORD EXISTS:", !!process.env.REDIS_PASSWORD)
 import { Worker } from "bullmq"
 import connection from "../config/bullmq-connection.js"
 import { sendContactAdminEmail } from "../services/sendmail/sendContactAdminEmail.js"

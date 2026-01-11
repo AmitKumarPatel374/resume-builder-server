@@ -13,32 +13,75 @@ export async function sendThanksFeedbackEmail(data) {
       to: [
         {
           email: data.email,
-          name: "User",
+          name: data.name || "User",
         },
       ],
-      subject: "Thank You for Your Feedback 💙",
+      subject: "Thank you for your feedback | resuInstant",
       htmlContent: `
-        <div style="font-family: Inter, Arial, sans-serif; background:#ffffff; padding:40px;">
-          <h2 style="color:#111;">Thank You for Your Feedback!</h2>
+<!DOCTYPE html>
+<html>
+  <body style="
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    color:#111827;
+  ">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
 
-          <p style="font-size:16px; color:#444;">
-            Hi there 👋,
-          </p>
+            <!-- Header -->
+            <tr>
+              <td style="padding-bottom:24px;">
+                <h2 style="margin:0;font-size:18px;font-weight:600;">
+                  Thank you for your feedback
+                </h2>
+              </td>
+            </tr>
 
-          <p style="font-size:16px; color:#444;">
-            Thank you for taking the time to share your feedback with <b>resuInstant</b>.
-            Your suggestions and thoughts help us improve and build a better experience for everyone.
-          </p>
+            <!-- Body -->
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Hello${data.name ? ` ${data.name}` : ""},
+              </td>
+            </tr>
 
-          <p style="font-size:16px; color:#444;">
-            We truly appreciate your support and trust in our platform.
-          </p>
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Thank you for taking the time to share your feedback with
+                <strong>resuInstant</strong>.
+              </td>
+            </tr>
 
-          <p style="margin-top:30px; font-size:14px; color:#777;">
-            — Team <b>resuInstant</b><br/>
-            Build resumes faster & smarter 🚀
-          </p>
-        </div>
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:24px;">
+                Your input helps us improve the platform and deliver a better
+                experience for all users.
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="
+                font-size:12px;
+                color:#6b7280;
+                border-top:1px solid #e5e7eb;
+                padding-top:16px;
+                line-height:1.6;
+              ">
+                Team <strong>resuInstant</strong><br/>
+                Build resumes faster & smarter
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
       `,
     };
 
@@ -49,7 +92,7 @@ export async function sendThanksFeedbackEmail(data) {
       },
     });
 
-    console.log("THANKS FEEDBACK EMAIL SENT:", response.data.messageId);
+    console.log("THANK YOU FEEDBACK EMAIL SENT:", response.data.messageId);
     return response.data;
   } catch (error) {
     console.error(

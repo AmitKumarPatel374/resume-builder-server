@@ -14,59 +14,101 @@ export async function sendForgotPasswordLinkEmail({
         name: "resuInstant",
         email: process.env.EMAIL,
       },
-      to: [
-        {
-          email,
-          name: userName || "User",
-        },
-      ],
-      subject: "Reset Your resuInstant Password 🔐",
+      to: [{ email }],
+      subject: "Password reset request for your resuInstant account",
       htmlContent: `
-        <div style="font-family: Inter, Arial, sans-serif; background:#ffffff; padding:40px;">
-          
-          <h2 style="color:#111;">Reset Your Password</h2>
+<!DOCTYPE html>
+<html>
+  <body style="
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    color:#111827;
+  ">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
+            
+            <!-- Header -->
+            <tr>
+              <td style="padding-bottom:24px;">
+                <h2 style="margin:0;font-size:18px;font-weight:600;">
+                  Reset your password
+                </h2>
+              </td>
+            </tr>
 
-          <p style="font-size:16px; color:#444;">
-            Hi ${userName || "there"},
-          </p>
+            <!-- Body -->
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Hello${userName ? ` ${userName}` : ""},
+              </td>
+            </tr>
 
-          <p style="font-size:16px; color:#444;">
-            We received a request to reset your <b>resuInstant</b> account password.
-            Click the button below to set a new password.
-          </p>
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                We received a request to reset the password for your resuInstant account.
+              </td>
+            </tr>
 
-          <div style="margin:30px 0;">
-            <a
-              href="${resetLink}"
-              style="
-                background:#22c55e;
-                color:#ffffff;
-                padding:12px 24px;
-                border-radius:9999px;
-                text-decoration:none;
-                font-weight:500;
-                display:inline-block;
-              "
-            >
-              Reset Password
-            </a>
-          </div>
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:24px;">
+                To proceed, click the button below. This link will expire in
+                <strong>5 minutes</strong>.
+              </td>
+            </tr>
 
-          <p style="font-size:14px; color:#666;">
-            This link will expire in <b>15 minutes</b>.
-          </p>
+            <!-- Button -->
+            <tr>
+              <td style="padding-bottom:32px;">
+                <a
+                  href="${resetLink}"
+                  style="
+                    display:inline-block;
+                    padding:10px 18px;
+                    background:#111827;
+                    color:#ffffff;
+                    text-decoration:none;
+                    font-size:14px;
+                    font-weight:500;
+                    border-radius:4px;
+                  "
+                >
+                  Reset password
+                </a>
+              </td>
+            </tr>
 
-          <p style="font-size:14px; color:#777; margin-top:20px;">
-            If you didn’t request a password reset, you can safely ignore this email.
-          </p>
+            <!-- Security note -->
+            <tr>
+              <td style="font-size:13px;color:#374151;line-height:1.6;padding-bottom:24px;">
+                If you did not request this change, you can safely ignore this email.
+                Your password will remain unchanged.
+              </td>
+            </tr>
 
-          <hr style="margin:30px 0;" />
+            <!-- Footer -->
+            <tr>
+              <td style="
+                font-size:12px;
+                color:#6b7280;
+                border-top:1px solid #e5e7eb;
+                padding-top:16px;
+                line-height:1.6;
+              ">
+                Team <strong>resuInstant</strong><br/>
+                Build resumes faster & smarter
+              </td>
+            </tr>
 
-          <p style="font-size:14px; color:#777;">
-            — Team <b>resuInstant</b><br/>
-            Build resumes faster & smarter 🚀
-          </p>
-        </div>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
       `,
     };
 
@@ -77,9 +119,8 @@ export async function sendForgotPasswordLinkEmail({
       },
     });
 
-    console.log("🔐 FORGOT PASSWORD LINK EMAIL SENT:", response.data.messageId);
+    console.log("FORGOT PASSWORD EMAIL SENT:", response.data.messageId);
     return response.data;
-
   } catch (error) {
     console.error(
       "Forgot password link email failed:",

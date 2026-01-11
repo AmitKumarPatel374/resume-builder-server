@@ -7,13 +7,81 @@ const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
 export async function sendContactUserEmail(data) {
   try {
     const payload = {
-      sender: { name: "resuInstant", email: process.env.EMAIL },
-      to: [{ email: data.email, name: data.name }],
-      subject: "Thanks for contacting resuInstant",
+      sender: {
+        name: "resuInstant",
+        email: process.env.EMAIL,
+      },
+      to: [
+        {
+          email: data.email,
+          name: data.name,
+        },
+      ],
+      subject: "We received your message | resuInstant",
       htmlContent: `
-        <h3>Hello ${data.name}, 👋</h3>
-        <p>Thanks for contacting <b>resuInstant</b>.</p>
-        <p>Our team will get back to you soon.</p>
+<!DOCTYPE html>
+<html>
+  <body style="
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    color:#111827;
+  ">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
+
+            <!-- Header -->
+            <tr>
+              <td style="padding-bottom:24px;">
+                <h2 style="margin:0;font-size:18px;font-weight:600;">
+                  Thanks for contacting us
+                </h2>
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Hello ${data.name},
+              </td>
+            </tr>
+
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Thank you for reaching out to <strong>resuInstant</strong>.
+                We’ve received your message and our team will review it shortly.
+              </td>
+            </tr>
+
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:24px;">
+                If your inquiry requires a response, we’ll get back to you as soon as possible.
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="
+                font-size:12px;
+                color:#6b7280;
+                border-top:1px solid #e5e7eb;
+                padding-top:16px;
+                line-height:1.6;
+              ">
+                Team <strong>resuInstant</strong><br/>
+                Build resumes faster & smarter
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
       `,
     };
 
@@ -27,7 +95,10 @@ export async function sendContactUserEmail(data) {
     console.log("CONTACT USER EMAIL SENT:", response.data.messageId);
     return response.data;
   } catch (error) {
-    console.error("Contact user email failed:", error.response?.data || error.message);
+    console.error(
+      "Contact user email failed:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 }

@@ -5,8 +5,9 @@ const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
 
 export async function sendVerifyEmailOtp({ email, otp, otpExpiry }) {
   try {
-    const expiryMinutes = Math.floor(
-      (new Date(otpExpiry).getTime() - Date.now()) / 60000
+    const expiryMinutes = Math.max(
+      1,
+      Math.floor((new Date(otpExpiry).getTime() - Date.now()) / 60000)
     );
 
     const payload = {
@@ -14,51 +15,97 @@ export async function sendVerifyEmailOtp({ email, otp, otpExpiry }) {
         name: "resuInstant",
         email: process.env.EMAIL,
       },
-      to: [
-        {
-          email,
-          name: "User",
-        },
-      ],
-      subject: "Verify Your Email Address - resuInstant",
+      to: [{ email }],
+      subject: "Verify your email address | resuInstant",
       htmlContent: `
-        <div style="font-family: Inter, Arial, sans-serif; background:#ffffff; padding:40px;">
-          
-          <h2 style="color:#111;">Verify Your Email Address</h2>
+<!DOCTYPE html>
+<html>
+  <body style="
+    margin:0;
+    padding:0;
+    background:#ffffff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    color:#111827;
+  ">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
 
-          <p style="font-size:16px; color:#444;">
-            Thanks for signing up with <b>resuInstant</b> 👋
-          </p>
+            <!-- Header -->
+            <tr>
+              <td style="padding-bottom:24px;">
+                <h2 style="margin:0;font-size:18px;font-weight:600;">
+                  Verify your email address
+                </h2>
+              </td>
+            </tr>
 
-          <p style="font-size:16px; color:#444;">
-            Please use the OTP below to verify that this email address belongs to you:
-          </p>
+            <!-- Body -->
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                Thank you for signing up with <strong>resuInstant</strong>.
+              </td>
+            </tr>
 
-          <div style="
-            margin:30px 0;
-            font-size:28px;
-            letter-spacing:6px;
-            font-weight:bold;
-            color:#000;
-          ">
-            ${otp}
-          </div>
+            <tr>
+              <td style="font-size:14px;line-height:1.6;padding-bottom:16px;">
+                To complete your registration, please use the verification code below.
+              </td>
+            </tr>
 
-          <p style="font-size:15px; color:#555;">
-            ⏱ This OTP will expire in <b>${expiryMinutes} minutes</b>.
-          </p>
+            <!-- OTP -->
+            <tr>
+              <td style="padding:16px 0 24px;">
+                <div style="
+                  display:inline-block;
+                  font-size:20px;
+                  letter-spacing:4px;
+                  font-weight:600;
+                  padding:10px 14px;
+                  border:1px solid #e5e7eb;
+                  background:#f9fafb;
+                ">
+                  ${otp}
+                </div>
+              </td>
+            </tr>
 
-          <p style="font-size:14px; color:#777; margin-top:20px;">
-            If you did not request this verification, please ignore this email.
-          </p>
+            <tr>
+              <td style="font-size:13px;color:#374151;line-height:1.6;padding-bottom:24px;">
+                This verification code will expire in
+                <strong>${expiryMinutes} minutes</strong>.
+              </td>
+            </tr>
 
-          <hr style="margin:30px 0;" />
+            <!-- Security note -->
+            <tr>
+              <td style="font-size:13px;color:#374151;line-height:1.6;padding-bottom:24px;">
+                If you did not create an account with resuInstant, you can safely ignore
+                this email.
+              </td>
+            </tr>
 
-          <p style="font-size:14px; color:#777;">
-            — Team <b>resuInstant</b><br/>
-            Build resumes faster & smarter 🚀
-          </p>
-        </div>
+            <!-- Footer -->
+            <tr>
+              <td style="
+                font-size:12px;
+                color:#6b7280;
+                border-top:1px solid #e5e7eb;
+                padding-top:16px;
+                line-height:1.6;
+              ">
+                Team <strong>resuInstant</strong><br/>
+                Build resumes faster & smarter
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
       `,
     };
 
@@ -71,7 +118,6 @@ export async function sendVerifyEmailOtp({ email, otp, otpExpiry }) {
 
     console.log("VERIFY EMAIL OTP SENT:", response.data.messageId);
     return response.data;
-
   } catch (error) {
     console.error(
       "Verify email OTP failed:",
