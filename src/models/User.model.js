@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import mongoose from "mongoose"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 const userSchema = new mongoose.Schema(
   {
@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 6,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 )
@@ -28,7 +32,6 @@ userSchema.pre("save", async function () {
     }
   }
 })
-
 
 userSchema.methods.comparePass = async function (password) {
   let pass = await bcrypt.compare(password, this.password)

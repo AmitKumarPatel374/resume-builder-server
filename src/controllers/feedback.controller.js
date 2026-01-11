@@ -1,4 +1,5 @@
 import feedbackModel from "../models/feedback.model.js"
+import { emailQueue } from "../queues/emailQueue.js";
 
 export const addFeedbackController = async (req, res) => {
   try {
@@ -37,6 +38,10 @@ export const addFeedbackController = async (req, res) => {
       source: source || "dashboard",
     })
 
+    await emailQueue.add("thanks-feedback", {
+      email
+    })
+
     // 5. Success response
     return res.status(201).json({
       message: "Feedback submitted successfully , Thanks!",
@@ -69,4 +74,12 @@ export const getAllFeedbackController = async (req, res) => {
   }
 }
 
+// export const sendThanksFeedbackEmailController = async (req, res) => {
+//   try {
+//     const user = req.user
 
+//     await emailQueue.add("thanks-feedback", {
+//       email,
+//     })
+//   } catch (error) {}
+// }
