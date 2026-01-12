@@ -279,7 +279,7 @@ export const resetPasswordController = async (req, res) => {
 
     let decode = jwt.verify(token, process.env.JWT_RAW_SECRET)
 
-    return res.render("index.ejs", { id: decode.id })
+    return res.render("index.ejs", { id: decode.id,BASE_URL: process.env.SERVER_ORIGIN })
   } catch (error) {
     console.log(error)
     return res.status(500).json({
