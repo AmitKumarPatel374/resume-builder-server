@@ -1,13 +1,9 @@
-import axios from "axios";
+import axios from "axios"
 
-const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
-const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const BREVO_URL = "https://api.brevo.com/v3/smtp/email"
+const BREVO_API_KEY = process.env.BREVO_API_KEY
 
-export async function sendForgotPasswordLinkEmail({
-  email,
-  userName,
-  resetLink,
-}) {
+export async function sendForgotPasswordLinkEmail({ email, userName, resetLink }) {
   try {
     const payload = {
       sender: {
@@ -110,22 +106,19 @@ export async function sendForgotPasswordLinkEmail({
   </body>
 </html>
       `,
-    };
+    }
 
     const response = await axios.post(BREVO_URL, payload, {
       headers: {
         "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
       },
-    });
+    })
 
-    console.log("FORGOT PASSWORD EMAIL SENT:", response.data.messageId);
-    return response.data;
+    console.log("FORGOT PASSWORD EMAIL SENT:", response.data.messageId)
+    return response.data
   } catch (error) {
-    console.error(
-      "Forgot password link email failed:",
-      error.response?.data || error.message
-    );
-    throw error;
+    console.error("Forgot password link email failed:", error.response?.data || error.message)
+    throw error
   }
 }

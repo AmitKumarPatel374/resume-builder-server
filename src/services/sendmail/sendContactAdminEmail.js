@@ -1,8 +1,8 @@
 // src/services/mailServices/sendContactAdminEmail.js
-import axios from "axios";
+import axios from "axios"
 
-const BREVO_API_KEY = process.env.BREVO_API_KEY;
-const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
+const BREVO_API_KEY = process.env.BREVO_API_KEY
+const BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 export async function sendContactAdminEmail(data) {
   try {
@@ -105,22 +105,19 @@ export async function sendContactAdminEmail(data) {
   </body>
 </html>
       `,
-    };
+    }
 
     const response = await axios.post(BREVO_URL, payload, {
       headers: {
         "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
       },
-    });
+    })
 
-    console.log("CONTACT ADMIN EMAIL SENT:", response.data.messageId);
-    return response.data;
+    console.log("CONTACT ADMIN EMAIL SENT:", response.data.messageId)
+    return response.data
   } catch (error) {
-    console.error(
-      "Contact admin email failed:",
-      error.response?.data || error.message
-    );
-    throw error;
+    console.error("Contact admin email failed:", error.response?.data || error.message)
+    throw error
   }
 }

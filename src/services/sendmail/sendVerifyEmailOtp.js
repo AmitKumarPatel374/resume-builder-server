@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from "axios"
 
-const BREVO_API_KEY = process.env.BREVO_API_KEY;
-const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
+const BREVO_API_KEY = process.env.BREVO_API_KEY
+const BREVO_URL = "https://api.brevo.com/v3/smtp/email"
 
 export async function sendVerifyEmailOtp({ email, otp, otpExpiry }) {
   try {
     const expiryMinutes = Math.max(
       1,
       Math.floor((new Date(otpExpiry).getTime() - Date.now()) / 60000)
-    );
+    )
 
     const payload = {
       sender: {
@@ -107,22 +107,19 @@ export async function sendVerifyEmailOtp({ email, otp, otpExpiry }) {
   </body>
 </html>
       `,
-    };
+    }
 
     const response = await axios.post(BREVO_URL, payload, {
       headers: {
         "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
       },
-    });
+    })
 
-    console.log("VERIFY EMAIL OTP SENT:", response.data.messageId);
-    return response.data;
+    console.log("VERIFY EMAIL OTP SENT:", response.data.messageId)
+    return response.data
   } catch (error) {
-    console.error(
-      "Verify email OTP failed:",
-      error.response?.data || error.message
-    );
-    throw error;
+    console.error("Verify email OTP failed:", error.response?.data || error.message)
+    throw error
   }
 }
